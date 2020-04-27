@@ -1,0 +1,86 @@
+题目描述
+  Given a 32-bit signed integer, reverse digits of an integer.
+  Note: Assume we are dealing with an environment which could only store integers within the 32-bit signed integer range: [−231,  231 − 1]. 
+        For the purpose of this problem, assume that your function returns 0 when the reversed integer overflows.
+
+
+例子
+  Example 1:
+    Input: 123
+    Output: 321
+    
+  Example 2:
+    Input: -123
+    Output: -321
+    
+  Example 3:
+    Input: 120
+    Output: 21
+  
+  
+题目分析
+  获取整数中的每一个数字，然后进行反转。
+  获取数字的方式：1）整除+求余的方式；2）将数字转为字符串直接翻转
+
+
+解决方法1：整除+求余，比较麻烦，时间复杂度为O(n)，空间复杂度为O(n),如果不考虑已知的限定范围
+  class Solution:
+    def reverse(self, x: int) -> int:
+        if x == 0:
+            return 0
+        else:
+            # decide the integer is positive of negative
+            if x > 0:
+                sign = 1
+            else:
+                sign = -1
+                x *= (-1)
+
+            flag = 1
+            max_up = 1
+            num = []
+
+            # compute the seperate numbers
+            for i in range(1, 11):
+                remain = x % pow(10, i)
+                number = remain // pow(10, i - 1)
+                num.append(number)
+                x = x - remain
+
+            # compute the valid number
+            forth = 0
+            back = 0
+            for j in range(len(num)):
+                if num[j] != 0:
+                    forth = j
+                    break
+            for j in range(len(num)):
+                if num[len(num) - 1 - j] != 0:
+                    back = len(num) - 1 - j
+                    break
+
+            # get the reverse number
+            new_num = num[forth: back + 1]
+            reverse = 0
+            for i in range(len(new_num)):
+                j = len(new_num) - 1 - i
+                reverse += new_num[j] * pow(10, i)
+            reverse = reverse * sign
+
+            # compute the range
+            if reverse > pow(2, 31) - 1 or reverse < -pow(2, 31):
+                return 0
+            else:
+                return reverse
+       
+ 解决方法2：通过字符串翻转
+    class Solution:
+      def reverse(self, x: int) -> int:
+        sign = -1 if x < 0 else 1
+        reverse = sign * int(str(abs(x))[::-1])
+        return reverse if -2**31 <= reverse <= 2**31-1 else 0
+ 
+ 
+ 提升    1. 即使使用数学方法，求每个数字，也是对10求余，然后整除10，反复进行获得
+        2. 涉及到翻转的问题，想办法转换为字符串解决，常用 a = "qwer" a[::-1] 即可获得"rewq"
+        3. 简单的if语句可以简写为sign = -1 if x < 0 else 1
