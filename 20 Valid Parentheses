@@ -1,0 +1,56 @@
+
+题目描述
+  Given a string containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+  An input string is valid if:
+    Open brackets must be closed by the same type of brackets.
+    Open brackets must be closed in the correct order.
+  Note that an empty string is also considered valid.
+
+例子
+  Example 1:
+    Input: "()"
+    Output: true
+  
+  Example 2:
+    Input: "()[]{}"
+    Output: true
+  
+  Example 3:
+    Input: "(]"
+    Output: false
+    
+  Example 4:
+    Input: "([)]"
+    Output: false
+  
+  Example 5:
+    Input: "{[]}"
+    Output: true
+  
+  
+题目分析
+  配对问题，使用栈进行解决，遇到前一个入栈，遇到后一个需要先判断栈是否为空，再决定是否出栈
+  
+
+解决方法：栈——后进先出
+  代码
+  class Solution:
+    def isValid(self, s: str) -> bool:
+        if len(s)%2 == 1:
+            return False
+        brackets = {'(':')', '[':']', '{':'}'}
+        temp = []
+        for i in s:
+            if i in brackets.keys():
+                temp.append(i)
+            else:
+                if len(temp) == 0:
+                    return False
+                key = temp.pop()
+                if brackets[key] != i:
+                    return False
+        return True if len(temp) == 0 else False
+        
+tips
+  1. list没有isempty函数
+  2. 出栈前需要先验证栈是否为空，如果为空，需要抛出异常
