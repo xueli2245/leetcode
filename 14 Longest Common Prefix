@@ -85,6 +85,7 @@
   高级技巧：从字典中找出value最大的那组值
       price = {'A':1, 'B':3, 'C':7}
       max(zip(price.values(), price.keys())) -> (7, 'C')
+      如果直接max(price),得到得是key的比较结果，'C'
 
 reference: https://www.cnblogs.com/whatisfantasy/p/6273913.html
   
