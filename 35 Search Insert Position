@@ -1,0 +1,68 @@
+题目描述
+  Given a sorted array and a target value, return the index if the target is found. If not, return the index where it would be if it were inserted in order.
+
+  You may assume no duplicates in the array.
+
+
+例子1
+  Input: [1,3,5,6], 5
+  Output: 2
+  
+
+例子2
+  Input: [1,3,5,6], 2
+  Output: 1
+
+例子3
+  Input: [1,3,5,6], 7
+  Output: 4
+
+例子4
+  Input: [1,3,5,6], 0
+  Output: 0
+
+  
+题目分析
+  分析list为空和不为空的情况：
+    list为空，直接返回0
+    llist不为空，val在list中返回其index；
+                val不在list中返回应该在的位置
+    考虑边界问题，target < min(nums) or target > max(nums)
+
+
+解决方法：
+  代码
+  class Solution:
+    def searchInsert(self, nums: List[int], target: int) -> int:
+        if len(nums) == 0:
+            return 0
+        if target < nums[0]:
+            return 0
+        elif target > nums[-1]:
+            return len(nums)
+        else:
+            for i in range(len(nums)):
+                if nums[i] >= target:
+                    return i
+
+  分析：# 此处时间复杂度是O(n)，空间复杂度为O(1)。对于一个已经排好序的list，使用二分法查找某一元素的时间复杂度可以降到O(nlog)
+
+
+改进：
+  代码
+  class Solution:
+    def searchInsert(self, nums: List[int], target: int) -> int:
+        if len(nums) == 0:
+            return 0
+        lower = 0
+        upper = len(nums) - 1
+        while(lower <= upper):
+            mid = (lower + upper) // 2
+            if nums[mid] == target:
+                return mid
+            elif nums[mid] > target:
+                upper = mid - 1
+            else:
+                lower = mid + 1
+        return lower
+  分析： 时间复杂度为O(nlogn)，空间复杂度O(1)
