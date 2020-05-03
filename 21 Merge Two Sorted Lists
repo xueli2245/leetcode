@@ -43,4 +43,4 @@
         if l1 != None and l2 == None:
             cur.next = l1
         return merge_ls 
-  分析：时间复杂度为O(n)，空间复杂度为O(n)
+  分析：时间复杂度为O(n)，由于此处是新建的一个list，所以空间复杂度为O(n)
