@@ -1,0 +1,35 @@
+题目描述
+  Given an integer array nums, find the contiguous subarray (containing at least one number) which has the largest sum and return its sum.
+
+
+例子1
+  Input: [-2,1,-3,4,-1,2,1,-5,4],
+  Output: 6
+  Explanation: [4,-1,2,1] has the largest sum = 6.
+  
+  
+题目分析
+  问题是求最大子数组。
+  自己分析：通过对最大子数组进行观察，左右两边都应该是正数，确定边界后，根据左右边界与其最近的负数和，判定边界需要保持还是缩小。如果和小于0，则需要缩小；如果和大于0，则需要保持。
+  动态规划分析：假定边界已经确定，为i，那么问题为求边界为i的最大子数组d[i]。此时可以进一步分解，边界为i的最大子数组可以通过边界为i-1的最大子数组d[i-1]和nums[i]求出。这是自顶向下的分解，类比斐波那契数列。所以计算的时候其实应该自底向上。先求d[0], d[1], d[2], ... , d[i]
+
+
+解决方法：动态规划
+  代码
+  class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        target = nums[0]
+        temp = nums[0]
+        if len(nums) == 1:
+            return target
+        else:
+            for i in range(1, len(nums)):
+                if temp <= 0:
+                    temp = nums[i]
+                else:
+                    temp += nums[i]
+                if temp > target:
+                    target = temp
+            return target
+
+Tips: 动态规划后续专题复习，目前理解斐波那契数列，自顶向下转为自底向上
