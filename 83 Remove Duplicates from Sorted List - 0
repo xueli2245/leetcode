@@ -1,0 +1,39 @@
+
+题目描述
+  Given a sorted linked list, delete all duplicates such that each element appear only once.
+
+
+例子1
+  Input: 1->1->2
+  Output: 1->2
+
+例子2
+  Input: 1->1->2->3->3
+  Output: 1->2->3
+  
+  
+题目分析
+  删除ListNode中的重复node，方法其实和删除sorted array中重复元素（26）一样。用2个指针cur+next即可解决。
+
+
+解决方法：cur+next
+  代码
+  class Solution:
+    def deleteDuplicates(self, head: ListNode) -> ListNode:
+        if head == None or head.next == None:
+            return head
+        else:
+            # nodes >= 2
+            cur = head
+            nex = head.next
+            while(nex != None):
+                if cur.val == nex.val:
+                    cur.next = nex.next
+                    nex = cur.next
+                else:
+                    cur = cur.next
+                    nex = cur.next
+            return head
+  分析：时间复杂度为O(n)，空间复杂度为O(1)
+
+做题情况：一把过（-0），数字表示难度系数
