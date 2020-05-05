@@ -31,5 +31,6 @@
                 if temp > target:
                     target = temp
             return target
+  分析：时间复杂度为O(n),空间复杂度为O(1)
 
 Tips: 动态规划后续专题复习，目前理解斐波那契数列，自顶向下转为自底向上
