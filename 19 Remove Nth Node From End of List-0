@@ -1,3 +1,4 @@
+19 Remove Nth Node From End of List
 
 题目描述
   Given a linked list, remove the n-th node from the end of list and return its head.
@@ -45,3 +46,28 @@ Note
   分析：时间复杂度为O(n)，空间复杂度为O(1)
 
 做题情况：比较简单，但是涉及while循环的时候，忘记++操作，导致进入死循环，需要注意
+
+Tips: 上述需要区分删除的node是否是第一个Node，所以可以通常自己加一个node避免这种情况；计算list的length可以单独抽象出一个函数，从而优化代码。
+
+  改进：
+    代码
+    class Solution:
+    def removeNthFromEnd(self, root: ListNode, n: int) -> ListNode:
+        length = self.get_length(root)
+        remove_index = length - n  # length = 3, n = 1, remove_index = 2
+        dummy = ListNode(0, root)
+        last_node = dummy
+        for i in range(length):
+            if i == remove_index:
+                last_node.next = last_node.next.next
+                break
+            last_node = last_node.next
+        return dummy.next
+    
+    def get_length(self, root: ListNode) -> int:
+        length = 1
+        node = root
+        while node.next:
+            length += 1
+            node = node.next
+        return length
