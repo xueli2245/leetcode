@@ -1,0 +1,47 @@
+
+题目描述
+  Given a linked list, remove the n-th node from the end of list and return its head.
+
+
+例子1
+  Given linked list: 1->2->3->4->5, and n = 2.
+  After removing the second node from the end, the linked list becomes 1->2->3->5.
+
+  
+Note
+  Given n will always be valid.
+
+
+题目分析
+  首先给定的是链表，考虑链表为空，只有1个元素，有2个及以上的元素；涉及删除node时需要考虑删除的是否是第一个节点。由于需要删除从end开始的第n个节点，但是单向list只能从head开始，所以需要先遍历一次list计算node节点总数m，然后通过数学运算，从head开始数，应该是删除第m-n+1个节点。
+
+
+解决方法：
+  代码
+  class Solution:
+    def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
+        if head == None:
+            return head
+        elif head.next == None and n == 1:
+            return None
+        else:
+            cur = head
+            count = 0
+            while(cur != None):
+                count += 1
+                cur = cur.next
+            target = count - n + 1
+            if target == 1:
+                return head.next
+            else:
+                cur = head
+                count = 1
+                while(count < target - 1):
+                    cur = cur.next
+                    count += 1
+                nex = cur.next
+                cur.next = nex.next
+                return head
+  分析：时间复杂度为O(n)，空间复杂度为O(1)
+
+做题情况：比较简单，但是涉及while循环的时候，忘记++操作，导致进入死循环，需要注意
