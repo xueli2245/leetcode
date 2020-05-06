@@ -1,0 +1,62 @@
+206 Reverse Linked List
+
+题目描述
+  Reverse a singly linked list.
+
+
+例子1
+  Input: 1->2->3->4->5->NULL
+  Output: 5->4->3->2->1->NULL
+  
+
+Note
+  A linked list can be reversed either iteratively or recursively. Could you implement both?
+
+
+题目分析
+
+  翻转链表，最简单的想法有2个，第一个是找到对应的node，然后交换node，但是由于链表是单向链表，所以时间复杂度较高O(n^2)；第二个是新建一个链表，在遍历第一个链表的同时不断插入新的链表，这种情况下时间复杂度为O(n)，空间复杂度也为O(n)。
+
+  但是由于链表的结构，可以找一个变量记住后续节点，然后以空间复杂度为O(1)的方式完成链表翻转：
+    temp = cur.next
+    cur.next = pre
+    pre = cur
+    cur = temp
+
+  上述是通过循环遍历的方式，还可以通过递归的方式。将第一个节点后的所有节点先进行排序，然后将排序后结果指向第一个节点，这样也可以。
+
+
+解决方法：新建list不断插入
+  代码
+  class Solution:
+    def reverseList(self, head: ListNode) -> ListNode:
+        if head == None or head.next == None:
+            return head
+        else:
+            cur = head
+            new_head = ListNode(0)
+            while(cur != None):
+                temp = ListNode(cur.val)
+                temp.next = new_head.next
+                new_head.next = temp
+                cur = cur.next
+            return new_head.next
+  分析：时间复杂度为O(n)，空间复杂度为O(n)
+
+做题情况：涉及while循环的时候，忘记++操作，导致进入死循环，需要注意
+
+
+  解决方法：采用递归的方式解决
+    代码
+    class Solution:
+    def reverseList(self, head: ListNode) -> ListNode:
+        if head == None or head.next == None:
+            return head
+        else:
+            cur = head.next
+            tf = Solution()
+            new_head = tf.reverseList(cur)
+            cur.next = head
+            head.next = None
+            return new_head
+  note：需要注意的是cur.next = head而不是new_head
