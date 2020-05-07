@@ -1,0 +1,66 @@
+24 Swap Nodes in Pairs
+
+题目描述
+  Given a linked list, swap every two adjacent nodes and return its head.
+  You may not modify the values in the list's nodes, only nodes itself may be changed.
+
+
+例子1
+  Given 1->2->3->4, you should return the list as 2->1->4->3.
+
+
+题目分析
+  交换相邻两个node，不能交换值，需要改变指向。
+  没有node or 只有一个node，直接返回当前head
+  有大于等于2个node，较为复杂，涉及三个节点，交换头两个节点和中间节点的交换略微不同，需要分开写。
+  有两种解决方法，第一种是循环，第二种是递归
+
+
+解决方法：循环
+  代码
+  class Solution:
+    def swapPairs(self, head: ListNode) -> ListNode:
+        if head == None or head.next == None:
+            return head
+        else:
+            pre = head
+            cur = pre.next
+            nex = cur.next
+            new_head = cur
+            
+            # change head
+            cur.next = pre
+            pre.next = nex
+            
+            cur = nex
+            # change body
+            while(cur != None):
+                nex = cur.next
+                if nex != None:
+                    pre.next = nex
+                    cur.next = nex.next
+                    nex.next = cur
+                    
+                    pre = cur
+                    cur = pre.next
+                else:
+                    return new_head
+            return new_head
+                
+  分析：时间复杂度为O(n)，空间复杂度为O(1)。
+
+做题情况：写的时候必须画图，不然自己容易晕。以后做题，现在草稿纸上理清思路再用代码实现，不太顺利，debug了好几次，更新的情况（类似于++），容易被遗忘。
+
+
+  解决方法：采用递归的方式解决
+    代码
+    class Solution:
+    def swapPairs(self, head: ListNode) -> ListNode:
+        if head == None or head.next == None:
+            return head
+        else:
+            cur, nex = head, head.next
+            cur.next = self.swapPairs(nex.next)
+            nex.next = cur
+            return nex
+  note：递归的代码非常简洁，只要想清楚模式，很容易就能写出。
