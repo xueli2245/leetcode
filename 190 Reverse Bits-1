@@ -1,0 +1,33 @@
+190 Reverse Bits
+
+题目描述
+  Reverse bits of a given 32 bits unsigned integer.
+
+
+例子1
+  Input: 00000010100101000001111010011100
+  Output: 00111001011110000010100101000000
+  Explanation: The input binary string 00000010100101000001111010011100 represents the unsigned integer 43261596, so return 964176192 which its binary representation is 00111001011110000010100101000000.
+
+
+例子2
+  Input: 11111111111111111111111111111101
+  Output: 10111111111111111111111111111111
+  Explanation: The input binary string 11111111111111111111111111111101 represents the unsigned integer 4294967293, so return 3221225471 which its binary representation is 10111111111111111111111111111111.
+
+
+题目分析
+  输入是十进制，需要将十进制转换为二进制，然后将二进制翻转，最后转换为十进制输出
+
+
+解决方法：
+  代码
+  class Solution:
+    def reverseBits(self, n: int) -> int:
+        return int((bin(n)[2:]).zfill(32)[::-1], 2)
+
+做题情况：python位运算不熟悉，函数都不清楚。
+
+tips：bin(): 将十进制转换为二进制，因为输出中含有0b，所以需要[2:]
+      zfill(): 字符串填充函数，默认在左边填充0
+      int( ,2)表示将二进制转换为十进制
