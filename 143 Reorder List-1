@@ -11,7 +11,7 @@
 
 例子2
   Given 1->2->3->4->5, reorder it to 1->5->2->4->3.
-  
+
 
 题目分析
   node依次插入，首先需要对后半部分list进行reverse，然后就可以得到2条list，通过依次插入拼接即可
@@ -19,7 +19,7 @@
   2nd step: 拼接，画图比较容易。
 
 
-解决方法：循环
+解决方法：
   代码
   class Solution:
     def reorderList(self, head: ListNode) -> None:
@@ -35,15 +35,11 @@
             while(temp != None):
                 count += 1
                 temp = temp.next
-            if count % 2 == 0:
-                pre_index = count / 2
-            else:
-                pre_index = count // 2 + 1
-            length = 1
+            pre_index = count/2 if count % 2 == 0 else count // 2 + 1
             pre = head
-            while(length < pre_index):
+            for i in range(pre_index-1):
                 pre = pre.next
-                length += 1
+            
             slow = pre.next
             pre.next = None
             
@@ -54,11 +50,13 @@
             cur = head
             cur_half = half_head
             while(cur_half != None):
+                # keep the next node
                 temp_cur = cur.next
                 temp_cur_half = cur_half.next
+                # change the arrow
                 cur.next = cur_half
                 cur_half.next = temp_cur
-                
+                # update
                 cur = temp_cur
                 cur_half = temp_cur_half
                 
@@ -75,7 +73,6 @@
                 pre = cur
                 cur = temp
             return pre
-                
   分析：时间复杂度为O(n)，空间复杂度为O(1)。
 
 做题情况：思路想出较快，但是实现有点麻烦，第一次忘记将前半段与后半段断开。
