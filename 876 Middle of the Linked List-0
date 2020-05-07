@@ -1,0 +1,45 @@
+876 Middle of the Linked List
+
+题目描述
+  Given a non-empty, singly linked list with head node head, return a middle node of linked list.
+
+  If there are two middle nodes, return the second middle node.
+
+
+例子1
+  Input: [1,2,3,4,5]
+  Output: Node 3 from this list (Serialization: [3,4,5])
+  The returned node has value 3.  (The judge's serialization of this node is [3,4,5]).
+  Note that we returned a ListNode object ans, such that:
+  ans.val = 3, ans.next.val = 4, ans.next.next.val = 5, and ans.next.next.next = NULL.
+
+例子2
+  Input: [1,2,3,4,5,6]
+  Output: Node 4 from this list (Serialization: [4,5,6])
+  Since the list has two middle nodes with values 3 and 4, we return the second one.
+
+Note
+  The number of nodes in the given list will be between 1 and 100.
+
+
+题目分析
+  返回中间的node。
+  只有一个node：返回该node即可
+  只有两个node：返回第二个node即可
+  >= 3: 奇数，返回正中即可；偶数，返回第二个中间数
+  使用快慢指针即可解决，快指针每次走2次，慢指针每次走一次。
+  
+
+解决方法：
+  代码
+  class Solution:
+    def middleNode(self, head: ListNode) -> ListNode:
+        slow = head
+        quick = head
+        while(quick != None and quick.next != None):
+            slow = slow.next
+            quick = quick.next.next
+        return slow
+  分析：时间复杂度为O(n)，空间复杂度为O(1)
+
+做题情况：较为顺利，一次过，注意一开始考虑是node数分开考虑，但是最后算法出来后，看是否能够进一步改善，合并。
