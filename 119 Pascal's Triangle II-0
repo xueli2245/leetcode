@@ -1,0 +1,42 @@
+119 Pascal's Triangle II
+
+题目描述
+  Given a non-negative index k where k ≤ 33, return the kth index row of the Pascal's triangle.
+
+
+例子1
+  Input: 3
+  Output: [1,3,3,1]
+
+
+Note
+  Could you optimize your algorithm to use only O(k) extra space?
+
+
+题目分析
+  每一行的计算都依赖上一行，所以需要先计算上一行的结果，再计算下一行。
+  
+
+解决方法：
+  代码
+  class Solution:
+    def getRow(self, rowIndex: int) -> List[int]:
+        if rowIndex == 0:
+            return [1]
+        elif rowIndex == 1:
+            return [1, 1]
+        else:
+            i = 1
+            cur = [1, 1]
+            while(i < rowIndex):
+                nex = []
+                nex.append(1)
+                for m in range(len(cur) - 1):
+                    nex.append(cur[m] + cur[m+1])
+                nex.append(1)
+                i += 1
+                cur = nex
+            return cur
+  分析：时间复杂度为O(n^2)，空间复杂度为O(n)
+
+做题情况：较为顺利，一次过
