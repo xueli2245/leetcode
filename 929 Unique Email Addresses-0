@@ -1,0 +1,69 @@
+929 Unique Email Addresses
+
+题目描述
+  Every email consists of a local name and a domain name, separated by the @ sign.
+
+  For example, in alice@leetcode.com, alice is the local name, and leetcode.com is the domain name.
+
+  Besides lowercase letters, these emails may contain '.'s or '+'s.
+
+  If you add periods ('.') between some characters in the local name part of an email address, mail sent there will be forwarded to the same address without dots in the local name.  For example, "alice.z@leetcode.com" and "alicez@leetcode.com" forward to the same email address.  (Note that this rule does not apply for domain names.)
+
+  If you add a plus ('+') in the local name, everything after the first plus sign will be ignored. This allows certain emails to be filtered, for example m.y+name@email.com will be forwarded to my@email.com.  (Again, this rule does not apply for domain names.)
+
+  It is possible to use both of these rules at the same time.
+
+  Given a list of emails, we send one email to each address in the list.  How many different addresses actually receive mails? 
+
+
+例子1
+  Input: ["test.email+alex@leetcode.com","test.e.mail+bob.cathy@leetcode.com","testemail+david@lee.tcode.com"]
+  Output: 2
+  Explanation: "testemail@leetcode.com" and "testemail@lee.tcode.com" actually receive mails
+
+
+Note:
+  1 <= emails[i].length <= 100
+  1 <= emails.length <= 100
+  Each emails[i] contains exactly one '@' character.
+  All local and domain names are non-empty.
+  Local names do not start with a '+' character.
+
+
+题目分析
+  字符串处理相关问题，对localName部分进行处理再拼接即可。
+
+
+解决方法：
+  代码
+  class Solution:
+    def numUniqueEmails(self, emails: List[str]) -> int:
+        if len(emails) == 1:
+            return 1
+        else:
+            for i in range(len(emails)):
+                origin = emails[i].split('@')
+                local = origin[0]
+                domain = origin[1]
+                
+                local = local.replace('.', '')
+                local = local.split('+')[0]
+                
+                emails[i] = local + '@' + domain
+            return len(set(emails))
+  分析：时间复杂度O(n)，空间复杂度为O(1)
+
+做题情况：题目较为简单，解题较快。
+
+
+Tips：字符串涉及的相关函数
+      [::-1]字符串翻转
+      s.split('')
+      ''.join(list)
+      s.replace(a, b) -- replace a with b
+      s[0]
+      s.index('a') 如果'a'不在s中，会抛出异常；使用s.find函数，在返回index，不在返回-1
+      in / not in
+      s.endwith(obj) -- decide the end of the string is obj or not
+      s.lower() and s.upper() 全小写or全大写
+      s.zfill(width) 返回长度为width的字符串，原字符串右对齐，前面用0填充。
