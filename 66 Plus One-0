@@ -1,0 +1,42 @@
+66 Plus One
+
+题目描述
+  Given a non-empty array of digits representing a non-negative integer, plus one to the integer.
+
+  The digits are stored such that the most significant digit is at the head of the list, and each element in the array contain a single digit.
+
+  You may assume the integer does not contain any leading zero, except the number 0 itself.
+
+
+例子1
+  Input: [1,2,3]
+  Output: [1,2,4]
+  Explanation: The array represents the integer 123.
+
+
+例子2
+  Input: [4,3,2,1]
+  Output: [4,3,2,2]
+  Explanation: The array represents the integer 4321.
+
+
+题目分析
+  将所给数字进行加一操作。由于涉及9+1，这种情况会产生进位，导致每一位都要考虑是否为9，较为麻烦，所以采取将其转化为字符串，再int成连续数字后实现+1操作，之后再转化为int型数组。
+
+
+解决方法：
+  代码
+  class Solution:
+    def plusOne(self, digits: List[int]) -> List[int]:
+        s_digits = [str(i) for i in digits]
+        target = int(''.join(s_digits))
+        s_digits = list(str(target + 1))
+        # s_digits = [int(i) for i in s_digits]
+        return s_digits
+  分析：时间复杂度O(n)，空间复杂度O(n)
+
+做题情况：代码拼写不要出错，写完后不要急着提交，应该先阅读检查一遍，尤其是变量拼写+变量更新操作，防止死循环。
+
+tips：字符串和list之间的转换
+      字符串->list，调用list函数即可
+      list->字符串，借用一个中间变量，遍历list的时候连接；[str(i) for i in list] + ''.join(list)
