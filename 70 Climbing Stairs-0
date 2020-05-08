@@ -1,0 +1,80 @@
+70 Climbing Stairs
+
+题目描述
+  Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?
+
+  Note: Given n will be a positive integer.
+
+
+例子1
+  Input: 2
+  Output: 2
+  Explanation: There are two ways to climb to the top.
+  1. 1 step + 1 step
+  2. 2 steps
+
+
+例子2
+  Input: 3
+  Output: 3
+  Explanation: There are three ways to climb to the top.
+  1. 1 step + 1 step + 1 step
+  2. 1 step + 2 steps
+  3. 2 steps + 1 step
+
+
+题目分析
+  爬楼梯问题，给定楼梯的步数n，每次走一步或者两步，求解一共有多少种方案。
+  设想两种极端情况：每次都只走一步；每次都只走2步，max_1。
+  所以走两步出现的情况有，没有2步，只有一个两步，。。。，有max_1个两步，通过排列组合的知识，相加即可
+
+  改进：也可以利用斐波拉契数列实现，第n步的方案是怎么产生的？其实是通过第（n-1）步的方案+走一步，或者第（n-2）的方案+走两步得到的。所以只要有了1和2的值，就可以得到任意给定n的值
+
+解决方法：排列组合
+  代码
+  class Solution:
+    def climbStairs(self, n: int) -> int:
+        if n <= 2:
+            return n
+        else:
+            x_2 = n // 2
+            total = 0
+            for i in range(x_2 + 1):
+                # C(i, n-i)
+                n_1 = self.cmpFactorial(1, n-i)
+                n_2 = self.cmpFactorial(1, i)
+                n_3 = self.cmpFactorial(1, n-2*i)
+                temp = n_1/(n_2 * n_3)
+                total += temp
+            return int(total)
+                
+    
+    def cmpFactorial(self, low: int, up: int) -> int:
+        total = 1
+        while(low <= up):
+            total *= low
+            low += 1
+        return total
+  分析：时间复杂度???，空间复杂度为O(1)
+
+做题情况：思路较为明确
+  
+  改进方法：斐波拉契数列
+    代码
+    class Solution:
+    def climbStairs(self, n: int) -> int:
+        if n <= 2:
+            return n
+        else:
+            a = 1
+            b = 1
+            count = 1
+            while(count < n):
+                a, b = b, a+b
+                count += 1
+            return b
+  分析：时间复杂度为O(n)，空间复杂度为O(1)。需要注意的是这个并非完整的斐波拉契数列
+
+
+tips：斐波拉契数列1, 1, 2, 3, 5, 8...
+      注意这种涉及第n步的问题，可以考虑递归的方式，通过前一步或者两步得到
