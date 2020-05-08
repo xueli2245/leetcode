@@ -1,0 +1,68 @@
+67 Add Binary
+
+题目描述
+  Given two binary strings, return their sum (also a binary string).
+
+  The input strings are both non-empty and contains only characters 1 or 0.
+
+
+例子1
+  Input: a = "11", b = "1"
+  Output: "100"
+
+
+例子2
+  Input: a = "1010", b = "1011"
+  Output: "10101"
+
+
+题目分析
+  位运算有两种处理方法，第一种是直接对二进制的字符串进行操作；第二种是将二进制转换为十进制。通常而言，转换为十进制更加简单
+
+解决方法：二进制字符串操作
+  代码
+  class Solution:
+    def addBinary(self, a: str, b: str) -> str:
+        if a == '0':
+            return b
+        elif b == '0':
+            return a
+        else:
+            a = a[::-1]
+            b = b[::-1]
+            longer = list(a) if len(a) >= len(b) else list(b)
+            shorter = list(a) if len(a) < len(b) else list(b)
+            for i in range(len(shorter)):
+                longer[i] = int(longer[i]) + int(shorter[i])
+            for j in range(len(shorter), len(longer)):
+                longer[j] = int(longer[j])
+            for k in range(len(longer)-1):
+                if longer[k] >= 2:
+                    temp = longer[k]
+                    longer[k] = temp % 2
+                    longer[k+1] = longer[k+1] + temp // 2
+            if longer[-1] >= 2:
+                temp = longer[-1]
+                longer[-1] = temp % 2
+                longer.append(temp // 2)
+            longer = [str(i) for i in longer]
+            result = ''.join(longer)
+            return result[::-1]
+  分析：时间复杂度O(n)，空间复杂度O(n)
+
+做题情况：情况考虑不够周全，每一对应位相加得到的结果，除了可能是0，1，2，还有可能是3及以上。忽略3及以上的情况
+  
+  改进方法：转化为十进制处理
+    代码
+    class Solution:
+    def addBinary(self, a: str, b: str) -> str:
+        a = int(a, 2)
+        b = int(b, 2)
+        target = a + b
+        return str(bin(target)[2:])
+  note：代码比起上面非常简洁。以后优先该方式。
+
+
+tips：位运算涉及的函数
+      int(a, 2): 将二进制转化为十进制
+      bin(b)[2:]: 将十进制转为二进制
