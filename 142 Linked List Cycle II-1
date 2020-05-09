@@ -1,0 +1,96 @@
+142 Linked List Cycle II
+
+
+题目描述
+  Given a linked list, return the node where the cycle begins. If there is no cycle, return null.
+
+  To represent a cycle in the given linked list, we use an integer pos which represents the position (0-indexed) in the linked list where tail connects to. If pos is -1, then there is no cycle in the linked list.
+
+  Note: Do not modify the linked list.
+
+
+例子1
+  Input: head = [3,2,0,-4], pos = 1
+  Output: tail connects to node index 1
+  Explanation: There is a cycle in the linked list, where tail connects to the second node.
+
+
+例子2
+  Input: head = [1,2], pos = 0
+  Output: tail connects to node index 0
+  Explanation: There is a cycle in the linked list, where tail connects to the first node.
+
+
+例子3
+  Input: head = [1], pos = -1
+  Output: no cycle
+  Explanation: There is no cycle in the linked list.
+
+
+Note:
+  Can you solve it without using extra space?
+
+
+题目分析
+  判断linked list是否带环，以及寻找环的初始节点
+  第一种方法：记录走过的node，如果cur.next在之前记录中，那么有环，还可以给出环的初始节点，时间复杂度为O(n)，空间复杂度为O(n)；
+  第二种方法：使用快慢指针，慢指针每次走一步，快指针每次走两步，如果快慢指针相遇，那么判定有环。至于找环的入口，一个指针从head出发，一个指针从相遇点出发，两个指针相遇的地方就是环的起点。证明方法博客中有，下次自己证明。
+  这篇博客讲解得太好了！https://blog.csdn.net/sinat_35261315/article/details/79205157
+
+
+解决方法：记录走过的node
+  代码
+  class Solution:
+    def detectCycle(self, head: ListNode) -> ListNode:
+        if head == None or head.next == None:
+            return None
+        else:
+            nodes = []
+            pre = head
+            while(1):
+                nodes.append(pre)
+                if pre.next == None:
+                    return None
+                else:         
+                    if pre.next in nodes:
+                        return nodes[nodes.index(pre.next)]
+                    else:
+                        pre = pre.next
+            
+  分析：时间复杂度O(n)，空间复杂度为O(n)
+
+做题情况：只能想出这一种方法，后面改进方法是看的博客。
+
+  改进方法：快慢指针
+    代码
+    class Solution:
+    def detectCycle(self, head: ListNode) -> ListNode:
+        if head == None or head.next == None:
+            return None
+        else:
+            slow = head.next
+            quick = head.next.next
+            while(quick):
+                if slow == quick:
+                    # the meeting point is slow
+                    break
+                else:
+                    slow = slow.next
+                    if quick.next == None:
+                        return None
+                    else:
+                        quick = quick.next.next
+            if quick == None:
+                return None
+            
+            # find the beginning of the circle
+            point = head
+            while(point != slow):
+                point = point.next
+                slow = slow.next
+            return point
+  分析：时间复杂度为O(n)，空间复杂度为O(1)。注意快慢指针的开头，要么都为head，要么都各自先走一步！
+
+
+Tips：python中没有null，等价的是None
+      带环linked list问题：判断是否带环；如果带环，给出环的起始点；如果带环，计算环的长度（2种方法，1是根据环的起始点，转一圈；2是利用快慢指针）。
