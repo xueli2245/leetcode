@@ -1,0 +1,112 @@
+2. Add Two Numbers
+
+
+题目描述
+  You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
+
+  You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+
+
+例子1
+  Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
+  Output: 7 -> 0 -> 8
+  Explanation: 342 + 465 = 807.
+
+
+题目分析
+  求两个数字之和，注意题目中数字是反向存储的！从低位开始相加，如果有进位，则加到下一位去。
+  这里有两种方法，
+      第一种是将结果存储在较长的linked list中，比较麻烦；
+      第二种是不管长度，将None看做0的方式求和。
+
+
+解决方法：存储在较长list中
+  代码
+  class Solution:
+    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        point1 = l1
+        point2 = l2
+        
+        unit = 0
+        ten = 0
+        
+        len1 = 0
+        while(point1):
+            len1 += 1
+            point1 = point1.next
+        len2 = 0
+        while(point2):
+            len2 += 1
+            point2 = point2.next
+            
+        point1 = l1
+        point2 = l2
+        
+        if len1 >= len2:
+            final = l1
+        else:
+            final = l2
+        temp = final
+        
+        while(point1 and point2):
+            result = point1.val + point2.val + ten
+            unit = result % 10 
+            ten = result // 10
+            temp.val = unit
+            point1 = point1.next
+            point2 = point2.next
+            pre = temp
+            temp = temp.next
+        
+        if ten > 0:
+            if temp == None:
+                pre.next = ListNode(ten)
+            else:
+                while(temp):
+                    result = temp.val + ten
+                    unit = result % 10
+                    ten = result // 10
+                    temp.val = unit
+                    pre = temp
+                    temp = temp.next
+                if ten > 0:
+                    pre.next = ListNode(ten) 
+        return final
+            
+  分析：时间复杂度O(n)，空间复杂度为O(1)
+
+做题情况：代码较为复杂，不够简洁。
+
+  改进方法：将None看做0的方式进行求和
+    代码
+    class Solution:
+    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        point1 = l1
+        point2 = l2
+        
+        unit = 0
+        ten = 0
+        
+        final = ListNode(0)
+        temp = final
+        
+        while(1):
+            p1 = point1.val if point1 else 0
+            p2 = point2.val if point2 else 0
+            
+            result = p1 + p2 + ten
+            unit = result % 10
+            ten = result // 10
+            temp.val = unit
+            
+            point1 = point1.next if point1 and point1.next else None
+            point2 = point2.next if point2 and point2.next else None
+            
+            if point1 or point2 or ten:
+                temp.next = ListNode(0)
+                temp = temp.next
+            else:
+                break
+    
+        return final
+  分析：时间复杂度为O(n)，空间复杂度为O(1)。技巧，当2个list长度不等的时候，自动补None，然后进行后续计算
