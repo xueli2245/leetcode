@@ -66,9 +66,11 @@
 做题情况：之前是使用dict+stack实现，dict记录键值对，stack记录操作情况。但是后来发现dict的有序版，
         from collections import OrderedDict()。
         OrderedDict.move_to_end(key)
+        OrderedDict.pop(key)
         OrderedDict.popitem(last)
             last = False: queue
             last = True：stack
         OrderedDict.keys()
+        OrderedDict.values()
         OrderedDict.items()
         reference blog: https://www.cnblogs.com/zhenwei66/p/6596248.html
