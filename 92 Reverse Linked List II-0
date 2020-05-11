@@ -1,0 +1,51 @@
+92 Reverse Linked List II
+
+
+题目描述
+  Reverse a linked list from position m to n. Do it in one-pass.
+  Note: 1 ≤ m ≤ n ≤ length of list.
+
+
+例子1
+  Input: 1->2->3->4->5->NULL, m = 2, n = 4
+  Output: 1->4->3->2->5->NULL
+
+
+题目分析
+  翻转给定范围的链表。与之前链表翻转类似，只不过需要保留开始的前一个和结束的下一个，中间翻转结束后再进行拼接即可。
+  1. 找到第m-1个和第m个node
+  2. 翻转m~n之间的list，并保留第n+1个node
+  3. 进行拼接m-1与新的开头，新的结束与n+1
+
+
+解决方法：
+  代码
+  class Solution:
+    def reverseBetween(self, head: ListNode, m: int, n: int) -> ListNode:
+        new_head = ListNode(0, head)
+        # find the previous node of the start node
+        bf_start = new_head
+        count = 0
+        while(count < m-1):
+            bf_start = bf_start.next
+            count += 1
+        # reverse the node between m and n
+        start = bf_start.next
+        pre = start
+        cur = pre.next
+        count += 1
+        while(count < n):
+            temp = cur.next
+            cur.next = pre
+            pre = cur
+            cur = temp      
+            count += 1
+        # concatenate
+        bf_start.next = pre
+        start.next = cur
+        return new_head.next
+  分析：时间复杂度O(n)，空间复杂度为O(1)
+
+做题情况：注意考察边界情况，可能m从1开始，常用的tips
+      new_head = ListNode(0, head)
+      return new_head.next
