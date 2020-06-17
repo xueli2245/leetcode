@@ -1,0 +1,82 @@
+25. Reverse Nodes in k-Group
+
+题目描述
+  Given a linked list, reverse the nodes of a linked list k at a time and return its modified list.
+
+  k is a positive integer and is less than or equal to the length of the linked list. If the number of nodes is not a multiple of k then left-out nodes in the end should remain as it is.
+ 
+
+例子1
+	Given this linked list: 1->2->3->4->5
+	For k = 2, you should return: 2->1->4->3->5
+	For k = 3, you should return: 3->2->1->4->5
+
+ 
+Note:
+	Only constant extra memory is allowed.
+	You may not alter the values in the list's nodes, only nodes itself may be changed.
+	  
+  
+题目分析
+  以k为group进行翻转，所以先考虑一般的翻转情况，整个linked list。依次为基本单位，考虑将整个list划分为m组，每组内有k个元素，每组翻转较为简单。然后考虑将组与组之间进行连接，连接发现需要头尾等信息，所以保留头尾信息。
+
+
+解决方法1：分组翻转再进行连接
+  代码
+	# class ListNode:
+	#     def __init__(self, val=0, next=None):
+	#         self.val = val
+	#         self.next = next
+	class Solution:
+	    def reverse(self, head: ListNode) -> ListNode:
+	        if head == None or head.next == None:
+	            return head
+	        pre = head
+	        cur = head.next
+	        while(cur):
+	            temp = cur.next
+	            if pre == head:
+	                pre.next = None
+	            cur.next = pre
+	            pre = cur
+	            cur = temp
+	        return pre
+	            
+	    
+	    def reverseKGroup(self, head: ListNode, k: int) -> ListNode:
+	        if head == None or head.next == None:
+	            return head
+	        # >= 2
+	        cur = head
+	        count = 0
+	        while(cur):
+	            count += 1
+	            cur = cur.next
+	        times = count // k
+	        
+	        new_head = ListNode()
+	        new_head.next = head
+	        cur = head
+	        last_k_head = ListNode()
+	        
+	        for i in range(times):
+	            k_head = cur
+	            for j in range(k-1):
+	                cur = cur.next
+	            k_next = cur.next
+	            cur.next = None
+	            k_tail = self.reverse(k_head)
+	            if i == 0:
+	                last_k_head = new_head
+	            last_k_head.next = k_tail
+	            last_k_head = k_head
+	            cur = k_next
+	        last_k_head.next = cur
+	        return new_head.next
+
+	分析：时间复杂度O(n),空间复杂度O(1)            
+                
+                
+        
+                    
+
