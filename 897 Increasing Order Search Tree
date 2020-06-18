@@ -1,0 +1,83 @@
+897. Increasing Order Search Tree
+
+题目描述
+	Given a binary search tree, rearrange the tree in in-order so that the leftmost node in the tree is now the root of the tree, and every node has no left child and only 1 right child.
+ 
+
+例子1
+	Example 1:
+	Input: [5,3,6,2,4,null,8,1,null,null,null,7,9]
+
+	       5
+	      / \
+	    3    6
+	   / \    \
+	  2   4    8
+	 /        / \ 
+	1        7   9
+
+	Output: [1,null,2,null,3,null,4,null,5,null,6,null,7,null,8,null,9]
+
+	 1
+	  \
+	   2
+	    \
+	     3
+	      \
+	       4
+	        \
+	         5
+	          \
+	           6
+	            \
+	             7
+	              \
+	               8
+	                \
+	                 9  
+
+
+Constraints:
+	The number of nodes in the given tree will be between 1 and 100.
+	Each node will have a unique integer value from 0 to 1000.
+		  
+  
+题目分析
+ 	首先输出的树的顺序为原树先序遍历的结果，所以可以分为2步：第一步，中序遍历获得nodes；第二步，按照要求重建树。
+
+
+解决方法1：递归
+	# Definition for a binary tree node.
+	# class TreeNode:
+	#     def __init__(self, val=0, left=None, right=None):
+	#         self.val = val
+	#         self.left = left
+	#         self.right = right
+	class Solution:
+	    def inOrderTraverse(self, root: TreeNode, nodes: List) -> List:
+	        if root == None:
+	            return nodes
+	        nodes = self.inOrderTraverse(root.left, nodes)
+	        nodes.append(root)
+	        nodes = self.inOrderTraverse(root.right, nodes)
+	        return nodes
+
+	    def reconTree(self, nodes: List) -> TreeNode:
+	        for i in range(len(nodes)-1):
+	            cur = nodes[i]
+	            cur.left = None
+	            cur.right = nodes[i+1]
+	        nodes[-1].left = None
+	        nodes[-1].right = None
+	        return nodes[0]
+	    
+	    def increasingBST(self, root: TreeNode) -> TreeNode:
+	        if root.left == None and root.right == None:
+	            return root
+	        nodes = []
+	        nodes = self.inOrderTraverse(root, nodes)
+	        new_root = self.reconTree(nodes)
+	        return new_root
+        
+	分析：时间复杂度为O(n)，空间复杂度为O(n)
+        
