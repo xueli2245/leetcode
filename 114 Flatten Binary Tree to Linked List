@@ -1,0 +1,73 @@
+114. Flatten Binary Tree to Linked List
+
+题目描述	
+	Given a binary tree, flatten it to a linked list in-place.
+ 
+
+例子1
+	For example, given the following tree:
+
+	    1
+	   / \
+	  2   5
+	 / \   \
+	3   4   6
+
+	The flattened tree should look like:
+
+	1
+	 \
+	  2
+	   \
+	    3
+	     \
+	      4
+	       \
+	        5
+	         \
+	          6
+		  
+  
+题目分析
+ 	首先输出的树的顺序为先序遍历，和897类似
+
+
+解决方法1：递归
+	# Definition for a binary tree node.
+	# class TreeNode:
+	#     def __init__(self, val=0, left=None, right=None):
+	#         self.val = val
+	#         self.left = left
+	#         self.right = right
+	class Solution:
+	    def preOrderTraverse(self, root: TreeNode, nodes: List) -> List:
+	        if root == None:
+	            return nodes
+	        nodes.append(root)
+	        nodes = self.preOrderTraverse(root.left, nodes)
+	        nodes = self.preOrderTraverse(root.right, nodes)
+	        return nodes
+
+	    def reconTree(self, nodes: List) -> TreeNode:
+	        for i in range(len(nodes)-1):
+	            cur = nodes[i]
+	            cur.left = None
+	            cur.right = nodes[i+1]
+	        nodes[-1].left = None
+	        nodes[-1].right = None
+	        return nodes[0]
+	    
+	    def flatten(self, root: TreeNode) -> None:
+	        """
+	        Do not return anything, modify root in-place instead.
+	        """
+	        if root == None:
+	            return;
+	        if root.left == None and root.right == None:
+		        return;
+	        nodes = []
+	        nodes = self.preOrderTraverse(root, nodes)
+	        new_root = self.reconTree(nodes)
+	        root = new_root
+        
+	分析：时间复杂度为O(n)，空间复杂度为O(n)
