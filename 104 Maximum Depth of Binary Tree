@@ -1,0 +1,60 @@
+104. Maximum Depth of Binary Tree
+
+题目描述
+  
+	Given a binary tree, find its maximum depth.
+
+	The maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.
+
+	Note: A leaf is a node with no children.
+ 
+
+例子1
+	Given binary tree [3,9,20,null,null,15,7],
+		3
+	   / \
+	  9  20
+	    /  \
+	   15   7
+	return its depth = 3.
+		  
+  
+题目分析
+  求二叉树的深度，本质上是遍历。设置一个全局变量保存最大的深度，然后在遍历的过程中不断改变depth，通过比较当前深度与最大深度判断是否需要进行更新。
+
+
+解决方法1：遍历
+  代码
+	# Definition for a binary tree node.
+	# class TreeNode:
+	#     def __init__(self, val=0, left=None, right=None):
+	#         self.val = val
+	#         self.left = left
+	#         self.right = right
+	maximum = 0
+	class Solution:
+	    def preOrderTraverse(self, root: TreeNode, depth: int):
+	        global maximum
+	        if root == None:
+	            return;
+	        else:
+	            depth += 1
+	        if depth > maximum:
+	            maximum = depth
+	        self.preOrderTraverse(root.left, depth)
+	        self.preOrderTraverse(root.right, depth)
+	        
+	    def maxDepth(self, root: TreeNode) -> int:
+	        depth = 0
+	        global maximum
+	        maximum = 0
+	        self.preOrderTraverse(root, depth)
+	        return maximum
+
+
+	分析：时间复杂度O(n),空间复杂度O(1)            
+                
+                
+        
+                    
+
