@@ -1,0 +1,62 @@
+872. Leaf-Similar Trees
+
+题目描述
+  
+	Consider all the leaves of a binary tree.  From left to right order, the values of those leaves form a leaf value sequence.
+ 
+
+例子1
+	For example, in the given tree above, the leaf value sequence is (6, 7, 4, 9, 8).
+
+	Two binary trees are considered leaf-similar if their leaf value sequence is the same.
+
+	Return true if and only if the two given trees with head nodes root1 and root2 are leaf-similar.
+
+	Note: The length of path between two nodes is represented by the number of edges between them.
+
+
+Constraints:
+
+	Both of the given trees will have between 1 and 200 nodes.
+	Both of the given trees will have values between 0 and 200
+		  
+  
+题目分析
+  判断两棵树的叶子节点是否相同，所以分为2步：第一步，获取每棵树的叶子节点；第二步，比较叶子节点，判断是否完全相同。获取叶子节点又涉及遍历，3种遍历随便使用一种即可，因为只要左右顺序没反就行
+
+
+解决方法1：
+	# Definition for a binary tree node.
+	# class TreeNode:
+	#     def __init__(self, val=0, left=None, right=None):
+	#         self.val = val
+	#         self.left = left
+	#         self.right = right
+
+	class Solution:
+	    def getLeaf(self, root: TreeNode, leaves: List) -> list:
+	        if root == None:
+	            return leaves
+	        if root.left == None and root.right == None:
+	            leaves.append(root.val)
+	            return leaves
+	        leaves = self.getLeaf(root.left, leaves)
+	        leaves = self.getLeaf(root.right, leaves)
+	        return leaves       
+	    
+	    def leafSimilar(self, root1: TreeNode, root2: TreeNode) -> bool:
+	        leaves1 = []
+	        leaves2 = []
+	        leaves1 = self.getLeaf(root1, leaves1)
+	        leaves2 = self.getLeaf(root2, leaves2)
+	        if len(leaves1) != len(leaves2):
+	            return False
+	        else:
+	            for i in range(len(leaves1)):
+	                if leaves1[i] != leaves2[i]:
+	                    return False
+	            return True
+	分析：时间复杂度为O(n)，空间复杂度为O(1)
+        
+        
+        
