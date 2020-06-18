@@ -1,0 +1,75 @@
+110. Balanced Binary Tree
+
+题目描述
+  
+	Given a binary tree, determine if it is height-balanced.
+
+	For this problem, a height-balanced binary tree is defined as:
+
+	a binary tree in which the left and right subtrees of every node differ in height by no more than 1.
+ 
+
+例子1
+	Given the following tree [3,9,20,null,null,15,7]:		3
+	    3
+	   / \
+	  9  20
+	    /  \
+	   15   7
+	Return true.
+
+例子2
+	Given the following tree [1,2,2,3,3,null,null,4,4]:
+
+	       1
+	      / \
+	     2   2
+	    / \
+	   3   3
+	  / \
+	 4   4
+	Return false.
+		  
+  
+题目分析
+  判断是否是二叉平衡树（左右子树高度差<=1），比较直观的方法就是在遍历的过程中判断每一个节点是否平衡，所以可以划分为2步，第一步是遍历，第二步是计算每一个node是否平衡。遍历有3种方式，此处选择前序遍历比较合理；计算平衡的关键是获取左右子树的深度，通过前一道题计算树的深度进行复用即可。
+
+
+解决方法1：遍历的思想
+	# Definition for a binary tree node.
+	# class TreeNode:
+	#     def __init__(self, val=0, left=None, right=None):
+	#         self.val = val
+	#         self.left = left
+	#         self.right = right
+	import numpy as np
+	flag = True
+	class Solution:
+	    def maxDepth(self, root: TreeNode) -> int:
+	        if root == None:
+	            return 0
+	        else:
+	            return 1 + max(self.maxDepth(root.left), self.maxDepth(root.right))
+	    
+	    def preOrderTraverse(self, root: TreeNode):
+	        global flag
+	        if flag == False:
+	            return;
+	        if root == None:
+	            return;
+	        left = self.maxDepth(root.left) # 左子树深度
+	        right = self.maxDepth(root.right) # 右子树深度
+	        if np.abs(left - right) > 1:
+	            flag = False
+	            return;
+	        self.preOrderTraverse(root.left)
+	        self.preOrderTraverse(root.right)
+	    
+	    def isBalanced(self, root: TreeNode) -> bool:
+	        global flag
+	        flag = True
+	        self.preOrderTraverse(root)
+	        return flag
+
+知识卡片
+  python全局变量定义后，在子函数中改变需要先声明 global x
