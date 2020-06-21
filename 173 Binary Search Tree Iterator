@@ -1,0 +1,74 @@
+173. Binary Search Tree Iterator
+
+题目描述	
+	Implement an iterator over a binary search tree (BST). Your iterator will be initialized with the root node of a BST.
+
+	Calling next() will return the next smallest number in the BST.
+	 
+
+例子1
+	tree = [7, 3, 15, null, null, 9, 20]
+	BSTIterator iterator = new BSTIterator(root);
+	iterator.next();    // return 3
+	iterator.next();    // return 7
+	iterator.hasNext(); // return true
+	iterator.next();    // return 9
+	iterator.hasNext(); // return true
+	iterator.next();    // return 15
+	iterator.hasNext(); // return true
+	iterator.next();    // return 20
+	iterator.hasNext(); // return false
+
+Note:
+	next() and hasNext() should run in average O(1) time and uses O(h) memory, where h is the height of the tree.
+	You may assume that next() call will always be valid, that is, there will be at least a next smallest number in the BST when next() is called.
+		  
+  
+题目分析
+ 	基于二叉搜索树实现2个功能，next()返回二叉搜索树的最小值；hasNext()判断是否还有元素被遍历到没。利用stack存储树每棵树每层尚未遍历的最左的节点，stack为空则表明所有元素均已被遍历。每次从stack中pop出一个元素，该元素具有left_child为None的特点，所以返回的val为当前节点的值，但是还要考虑将其右子树按一定的顺序加入到stack中。
+
+
+解决方法1：层状遍历
+	# Definition for a binary tree node.
+	# class TreeNode:
+	#     def __init__(self, val=0, left=None, right=None):
+	#         self.val = val
+	#         self.left = left
+	#         self.right = right
+	class BSTIterator:
+
+	    def __init__(self, root: TreeNode):
+	        self.stack = []
+	        temp = root
+	        while(temp):
+	            self.stack.append(temp)
+	            temp = temp.left
+	            
+
+	    def next(self) -> int:
+	        """
+	        @return the next smallest number
+	        """
+	        cur = self.stack.pop()
+	        r_child = cur.right
+	        while(r_child):
+	            self.stack.append(r_child)
+	            r_child = r_child.left
+	        return cur.val
+	        
+
+	    def hasNext(self) -> bool:
+	        """
+	        @return whether we have a next smallest number
+	        """
+	        return True if self.stack else False
+	        
+
+
+	# Your BSTIterator object will be instantiated and called as such:
+	# obj = BSTIterator(root)
+	# param_1 = obj.next()
+	# param_2 = obj.hasNext()
+        
+        
+        
