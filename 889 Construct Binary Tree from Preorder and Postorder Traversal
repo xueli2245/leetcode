@@ -1,0 +1,60 @@
+889. Construct Binary Tree from Preorder and Postorder Traversal
+
+题目描述
+	Return any binary tree that matches the given preorder and postorder traversals.
+	Values in the traversals pre and post are distinct positive integers.
+
+例子
+	Input: pre = [1,2,4,5,3,6,7], post = [4,5,2,6,7,3,1]
+	Output: [1,2,3,4,5,6,7]
+
+Note
+	1 <= pre.length == post.length <= 30
+	pre[] and post[] are both permutations of 1, 2, ..., pre.length.
+	It is guaranteed an answer exists. If there exists multiple answers, you can return any of them.
+
+题目分析
+	根据前序遍历获得父节点，与后序遍历相结合获得左右孩子集合。
+
+
+解决方法：递归
+	# Definition for a binary tree node.
+	# class TreeNode:
+	#     def __init__(self, val=0, left=None, right=None):
+	#         self.val = val
+	#         self.left = left
+	#         self.right = right
+	class Solution:
+	    def constructFromPrePost(self, pre: List[int], post: List[int]) -> TreeNode:
+	        if not pre:
+	            return None
+	        root = TreeNode(pre[0])
+	        if len(pre) == 1:
+	            return root
+	        
+	        left_idx = post.index(pre[1])
+	        post_l = []
+	        post_r = []
+	        for i in range(len(post)):
+	            if i <= left_idx:
+	                post_l.append(post[i])
+	            else:
+	                post_r.append(post[i])
+	        
+	        pre_l = []
+	        pre_r = []
+	        i = 1
+	        while(i < len(pre)):
+	            if i < 1 + len(post_l):
+	                pre_l.append(pre[i])
+	            else:
+	                pre_r.append(pre[i])
+	            i += 1
+	        
+	        left = self.constructFromPrePost(pre_l, post_l)
+	        right = self.constructFromPrePost(pre_r, post_r)
+	        
+	        root.left = left
+	        root.right = right
+	        
+	        return root
