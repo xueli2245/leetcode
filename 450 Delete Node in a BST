@@ -1,0 +1,145 @@
+450. Delete Node in a BST
+
+题目描述	
+	Given a root node reference of a BST and a key, delete the node with the given key in the BST. Return the root node reference (possibly updated) of the BST.
+
+	Basically, the deletion can be divided into two stages:
+
+	Search for a node to remove.
+	If the node is found, delete the node.
+
+
+例子1
+	root = [5,3,6,2,4,null,7]
+	key = 3
+
+	    5
+	   / \
+	  3   6
+	 / \   \
+	2   4   7
+
+	Given key to delete is 3. So we find the node with value 3 and delete it.
+
+	One valid answer is [5,4,6,2,null,null,7], shown in the following BST.
+
+	    5
+	   / \
+	  4   6
+	 /     \
+	2       7
+
+	Another valid answer is [5,2,6,null,4,null,7].
+
+	    5
+	   / \
+	  2   6
+	   \   \
+	    4   7
+
+Note: Time complexity should be O(height of tree).
+		  
+  
+题目分析
+ 	BST的删除node，首先需要查找node，如果该node存在则删除，不存在则不进行修改，返回当前root。所以存在两步，第一步，查找node；第二步，删除node。查找node，如果找到需要返回删除的node及其父节点，涉及讨论左右子节点是否为空，以及节点是否存在等问题。同样删除node时，替代node有两种情况，第一种是左子树的最大值，第二种是右子树的最小值。这里选用右子树的最小值，即左孩子为空的情况。同样，涉及父节点孩子的更改，这里返回的是父节点，需要判断父节点是否与删除node重合，从而进行讨论
+
+
+解决方法1：层状遍历
+	# Definition for a binary tree node.
+	# class TreeNode:
+	#     def __init__(self, val=0, left=None, right=None):
+	#         self.val = val
+	#         self.left = left
+	#         self.right = right
+	flag = True
+	class Solution:
+	    def searchNode(self, root: TreeNode, key: int) -> List[TreeNode]:
+	        global flag
+	        # de_node = de[0]
+	        # de_parent = de[1]
+	        temp = []
+	        if flag == False:
+	            return temp
+	        if root.val > key:
+	            if root.left != None:
+	                if root.left.val == key:
+	                    temp.append(root.left)
+	                    temp.append(root)
+	                else:
+	                    temp = self.searchNode(root.left, key)
+	            else:
+	                flag = False
+	        else:
+	            if root.right != None:
+	                if root.right.val == key:
+	                    temp.append(root.right)
+	                    temp.append(root)
+	                else:
+	                    temp = self.searchNode(root.right, key)
+	            else:
+	                flag = False
+	        return temp
+	        
+	        
+	            
+	    def searchMinRightChild(self, root: TreeNode) -> TreeNode:
+	        cur_par = root
+	        cur_child = root.right
+	        while(cur_child.left):
+	            cur_par = cur_child
+	            cur_child = cur_child.left
+	        return cur_par
+	            
+	    
+	    def deleteNode(self, root: TreeNode, key: int) -> TreeNode:
+	        global flag
+	        flag = True
+	        if root == None:
+	            return None
+	        if root.val == key:
+	            if root.left == None and root.right == None:
+	                return None
+	            elif root.left == None and root.right != None:
+	                return root.right
+	            elif root.left != None and root.right == None:
+	                return root.left
+	            else:
+	                de_node = root
+	        else:
+	            de = self.searchNode(root, key)
+	            if flag == False:
+	                return root
+	            de_node = de[0]
+	            de_parent = de[1]
+	            if de_node.left == None and de_node.right == None:
+	                if de_parent.left == de_node:
+	                    de_parent.left = None
+	                else:
+	                    de_parent.right = None
+	                return root
+	            elif de_node.left == None and de_node.right != None:
+	                if de_parent.left == de_node:
+	                    de_parent.left  = de_node.right
+	                else:
+	                    de_parent.right = de_node.right
+	                return root
+	            elif de_node.left != None and de_node.right == None:
+	                if de_parent.left == de_node:
+	                    de_parent.left  = de_node.left
+	                else:
+	                    de_parent.right = de_node.left
+	                return root
+	            else:
+	                pass
+	        rep_parent = self.searchMinRightChild(de_node)
+	        if rep_parent == de_node:
+	            rep_child = rep_parent.right
+	            de_node.val = rep_child.val
+	            de_node.right = rep_child.right
+	        else:
+	            rep_child = rep_parent.left
+	            de_node.val = rep_child.val
+	            rep_parent.left = rep_child.right
+	        rep_child = None
+	        
+	        return root
