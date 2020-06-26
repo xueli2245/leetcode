@@ -1,0 +1,38 @@
+507. Perfect Number
+
+题目描述	
+	We define the Perfect Number is a positive integer that is equal to the sum of all its positive divisors except itself.
+
+	Now, given an integer n, write a function that returns true when it is a perfect number and false when it is not.
+
+
+例子1
+	Input: 28
+	Output: True
+	Explanation: 28 = 1 + 2 + 4 + 7 + 14
+
+
+Note:
+	 The input number n will not exceed 100,000,000. (1e8)
+
+  
+题目分析
+	找因子，涉及乘法，所以以根号n为界。从2or3开始，每次加2，可以缩小搜索范围。
+ 	
+
+
+解决方法1：递归
+	class Solution:
+    def checkPerfectNumber(self, num: int) -> bool:
+        if num <= 1:
+            return False
+        total = 1
+        i = 2 if num % 2 == 0 else 3
+        while(i*i <= num):
+            if num % i == 0:
+                total += i
+                if i*i < num:
+                    total += (num/i)
+            i += 2
+        return num == total
+        
