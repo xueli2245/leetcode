@@ -1,0 +1,58 @@
+50. Pow(x, n)
+
+题目描述	
+	Implement pow(x, n), which calculates x raised to the power n (xn).
+
+
+Example 1:
+	Input: 2.00000, 10
+	Output: 1024.00000
+
+Example 2:
+	Input: 2.10000, 3
+	Output: 9.26100
+
+Example 3:
+	Input: 2.00000, -2
+	Output: 0.25000
+	Explanation: 2-2 = 1/22 = 1/4 = 0.25
+
+
+Note:
+	-100.0 < x < 100.0
+	n is a 32-bit signed integer, within the range [−231, 231 − 1]
+
+  
+题目分析
+	涉及幂的计算，同样利用二分的思想进行处理，把n转为n/2。。。
+ 	
+
+
+解决方法1：递归
+	import copy
+	class Solution:
+	    def power(self, x: float, n: int) -> float:
+	        if n == 0:
+	            return 1.00000
+	        elif n == 1:
+	            return x
+	        else:
+	            result = self.power(x, n//2)
+	            result = result * result
+	            if n % 2 == 1:
+	                result *= x
+	            return result
+	    
+	    def myPow(self, x: float, n: int) -> float:
+	        if x == 1.00000 or x == 0.00000:
+	            return x
+	        else:
+	            if n == 0:
+	                return 1.00000
+	            else:
+	                if n < 0:
+	                    x = 1/x
+	                    n *= -1
+	                result = self.power(x, n)
+	                return result
+                    
