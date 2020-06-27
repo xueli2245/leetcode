@@ -1,0 +1,63 @@
+475. Heaters
+
+题目描述	
+	Winter is coming! Your first job during the contest is to design a standard heater with fixed warm radius to warm all the houses.
+
+	Now, you are given positions of houses and heaters on a horizontal line, find out minimum radius of heaters so that all houses could be covered by those heaters.
+
+	So, your input will be the positions of houses and heaters seperately, and your expected output will be the minimum radius standard of heaters.
+
+	Note:
+
+	Numbers of houses and heaters you are given are non-negative and will not exceed 25000.
+	Positions of houses and heaters you are given are non-negative and will not exceed 10^9.
+	As long as a house is in the heaters' warm radius range, it can be warmed.
+	All the heaters follow your radius standard and the warm radius will the same.
+
+
+Example 1:
+
+	Input: [1,2,3],[2]
+	Output: 1
+	Explanation: The only heater was placed in the position 2, and if we use the radius 1 standard, then all the houses can be warmed.
+ 
+
+Example 2:
+
+	Input: [1,2,3,4],[1,4]
+	Output: 1
+	Explanation: The two heater was placed in the position 1 and 4. We need to use radius 1 standard, then all the houses can be warmed.
+
+
+  
+题目分析
+	二分查找可能一开始不好想，直接想最通用的暴力解法，然后利用二分法对暴力法进行改进。这里题目并没有告诉是否排序，所以需要先进行排序。然后对house进行循环，找到比house小的heater中最大的一个和比house大的heater中最小的一个，取它们的最小值
+ 	
+
+
+解决方法1：二分法
+	class Solution:
+    def findRadius(self, houses: List[int], heaters: List[int]) -> int:
+        dis = []
+        heaters.sort()
+        for house in houses:
+            if house <= heaters[0]:
+                dis.append(heaters[0]-house)
+            elif house >= heaters[-1]:
+                dis.append(house-heaters[-1])
+            else:
+                i = 0
+                j = len(heaters)-1
+                while(i < j):
+                    mid = (i+j)//2
+                    if house == heaters[mid]:
+                        dis.append(0)
+                        break
+                    elif house > heaters[mid]:
+                        i = mid
+                    else:
+                        j = mid
+                    if i + 1 == j:
+                        dis.append(min(abs(house-heaters[i]), abs(house-heaters[j])))
+                        break
+        return max(dis)
